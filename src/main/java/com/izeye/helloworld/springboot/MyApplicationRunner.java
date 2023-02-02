@@ -1,5 +1,6 @@
 package com.izeye.helloworld.springboot;
 
+import io.micrometer.core.instrument.Metrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -19,6 +20,8 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         log.info("Hello, Spring Boot!");
+
+        Metrics.counter("hello").increment();
     }
 
 }
