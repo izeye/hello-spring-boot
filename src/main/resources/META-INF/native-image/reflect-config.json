@@ -1,0 +1,13 @@
+[
+  {
+    "name": "org.HdrHistogram.ConcurrentHistogram",
+    "methods": [
+      {
+        "name": "<init>",
+        "parameterTypes": [
+          "org.HdrHistogram.AbstractHistogram"
+        ]
+      }
+    ]
+  }
+]
