@@ -1,12 +1,17 @@
+import java.time.format.DateTimeFormatter
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.0.4'
+	id 'org.ajoberstar.grgit' version '5.0.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
 
+def git = org.ajoberstar.grgit.Grgit.open(["currentDir": "${project.rootDir}"])
+
 group = 'com.izeye.helloworld'
-version = '0.0.1-SNAPSHOT'
+version = DateTimeFormatter.ofPattern("yyyyMMdd").format(git.head().dateTime) + "-" + git.head().abbreviatedId
 sourceCompatibility = '17'
 
 repositories {
@@ -19,7 +24,7 @@ dependencies {
 }
 
 tasks.named("bootBuildImage") {
-	imageName.set("izeye/hello-spring-boot:v20230417")
+	imageName.set("izeye/hello-spring-boot:${project.version}")
 	publish = true
 	docker {
 		publishRegistry {
