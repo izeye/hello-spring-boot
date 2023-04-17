@@ -18,6 +18,17 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+tasks.named("bootBuildImage") {
+	imageName.set("izeye/hello-spring-boot:v20230417")
+	publish = true
+	docker {
+		publishRegistry {
+			username = System.getenv("DOCKER_USERNAME")
+			password = System.getenv("DOCKER_PASSWORD")
+		}
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
