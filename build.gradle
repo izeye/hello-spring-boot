@@ -23,5 +23,5 @@ tasks.named('test') {
 }
 
 tasks.named('wrapper') {
-	gradleVersion = "8.0.2"
+	gradleVersion = "8.4"
 }
