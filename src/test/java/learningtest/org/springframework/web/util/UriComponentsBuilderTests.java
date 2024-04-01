@@ -19,10 +19,12 @@ class UriComponentsBuilderTests {
         URI uri = UriComponentsBuilder.fromHttpUrl("https://httpbin.org/headers")
                 .queryParam("a", "test")
                 .queryParam("b", "테스트")
+                .queryParam("empty", "")
+                .queryParam("null", (String) null)
                 .build()
                 .encode()
                 .toUri();
-        assertThat(uri).hasToString("https://httpbin.org/headers?a=test&b=%ED%85%8C%EC%8A%A4%ED%8A%B8");
+        assertThat(uri).hasToString("https://httpbin.org/headers?a=test&b=%ED%85%8C%EC%8A%A4%ED%8A%B8&empty=&null");
     }
 
 }
