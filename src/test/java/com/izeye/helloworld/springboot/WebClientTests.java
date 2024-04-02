@@ -39,7 +39,4 @@ class WebClientTests {
         System.out.println(response);
     }
 
-    record Person(String firstName, String lastName) {
-    }
-
 }
