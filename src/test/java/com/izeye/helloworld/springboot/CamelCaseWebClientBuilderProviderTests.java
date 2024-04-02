@@ -12,21 +12,21 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link WebClient}.
+ * Tests for {@link CamelCaseWebClientBuilderProvider}.
  *
  * @author Johnny Lim
  */
 @SpringBootTest
-class WebClientTests {
+class CamelCaseWebClientBuilderProviderTests {
 
     @Autowired
-    private WebClient.Builder webClientBuilder;
+    private CamelCaseWebClientBuilderProvider provider;
 
     private WebClient webClient;
 
     @BeforeEach
     void setUp() {
-        this.webClient = webClientBuilder.build();
+        this.webClient = provider.provide().build();
     }
 
     @Test
@@ -39,7 +39,7 @@ class WebClientTests {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                 .block();
         System.out.println(response);
-        assertThat(response.get("data")).asString().contains("first_name");
+        assertThat(response.get("data")).asString().contains("firstName");
     }
 
 }
