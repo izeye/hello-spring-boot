@@ -2,6 +2,7 @@ package com.izeye.helloworld.springboot;
 
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.boot.actuate.endpoint.annotation.Selector;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +15,13 @@ import org.springframework.stereotype.Component;
 public class TestEndpoint {
 
     @ReadOperation
-    public String read() {
-        return "test";
+    public String findAll() {
+        return "findAll()";
+    }
+
+    @ReadOperation
+    public String findById(@Selector String id) {
+        return "findById(): " + id;
     }
 
 }
