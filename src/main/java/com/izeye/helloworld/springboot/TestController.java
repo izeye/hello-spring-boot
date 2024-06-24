@@ -34,4 +34,12 @@ public class TestController {
         return "I slept for %d seconds.".formatted(seconds);
     }
 
+    @GetMapping("/my-request")
+    public MyRequest getMyRequest(HttpServletRequest httpServletRequest) {
+        MyRequest myRequest = new MyRequest();
+        myRequest.setId("id");
+        myRequest.setHttpServletRequest(httpServletRequest);
+        return myRequest;
+    }
+
 }
