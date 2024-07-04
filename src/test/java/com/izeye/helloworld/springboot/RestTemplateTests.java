@@ -9,7 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -38,7 +38,7 @@ class RestTemplateTests {
 
     @Test
     void test() {
-        assertThat(this.restTemplate.getRequestFactory()).isInstanceOf(SimpleClientHttpRequestFactory.class);
+        assertThat(this.restTemplate.getRequestFactory()).isInstanceOf(HttpComponentsClientHttpRequestFactory.class);
 
         String url = "https://www.google.com/";
 
@@ -52,9 +52,9 @@ class RestTemplateTests {
         ResponseEntity<String> responseEntity = this.restTemplate.exchange(requestEntity, String.class);
 
         HttpHeaders headers = responseEntity.getHeaders();
-        assertThat(headers).containsEntry("Content-Encoding", List.of("gzip"));
+        // Apache HttpClient has already handled content-encoding under the hood, so there's no Content-Encoding header.
+        assertThat(headers).doesNotContainEntry("Content-Encoding", List.of("gzip"));
         System.out.println(headers);
-        // Garbled text is expected as content-decoding didn't happen.
         System.out.println(responseEntity.getBody());
     }
 
