@@ -64,4 +64,18 @@ class WebClientTests {
         System.out.println(responseEntity.getBody());
     }
 
+    @Test
+    void testZstd() {
+        String uri = "https://www.facebook.com/";
+        ResponseEntity<String> responseEntity = this.webClient.get()
+                .uri(uri).header(HttpHeaders.ACCEPT_ENCODING, "zstd")
+                .retrieve()
+                .toEntity(String.class).block();
+        HttpHeaders headers = responseEntity.getHeaders();
+        // Reactor Netty has already handled content-encoding under the hood, so there's no Content-Encoding header.
+        assertThat(headers).doesNotContainEntry("Content-Encoding", List.of("zstd"));
+        System.out.println(headers);
+        System.out.println(responseEntity.getBody());
+    }
+
 }
