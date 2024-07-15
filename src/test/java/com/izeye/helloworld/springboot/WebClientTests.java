@@ -72,8 +72,8 @@ class WebClientTests {
                 .retrieve()
                 .toEntity(String.class).block();
         HttpHeaders headers = responseEntity.getHeaders();
-        // Spring Boot 2.7.18 doesn't seem to support zstd encoding.
-        assertThat(headers).containsEntry("Content-Encoding", List.of("zstd"));
+        // Reactor Netty has already handled content-encoding under the hood, so there's no Content-Encoding header.
+        assertThat(headers).doesNotContainEntry("Content-Encoding", List.of("zstd"));
         System.out.println(headers);
         System.out.println(responseEntity.getBody());
     }
