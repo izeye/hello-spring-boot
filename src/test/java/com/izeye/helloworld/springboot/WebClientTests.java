@@ -54,7 +54,7 @@ class WebClientTests {
     @Test
     void testGzip() {
         ResponseEntity<String> responseEntity = this.webClient.get()
-                .uri("https://www.google.com/").header(HttpHeaders.ACCEPT_ENCODING, "gzip")
+                .uri("https://www.google.com/")
                 .retrieve()
                 .toEntity(String.class).block();
         HttpHeaders headers = responseEntity.getHeaders();
