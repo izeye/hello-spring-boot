@@ -21,4 +21,17 @@ public class ThymeleafTestController {
         return "index";
     }
 
+    @GetMapping(path = "/small-data-with-error")
+    public String smallDataWithError(Model model) {
+        model.addAttribute("data", "a".repeat(1_000));
+        return "template_with_data_and_error";
+    }
+
+    // org.springframework.http.converter.HttpMessageNotWritableException: No converter for [class java.util.LinkedHashMap] with preset Content-Type 'text/html;charset=UTF-8'
+    @GetMapping(path = "/large-data-with-error")
+    public String largeDataWithError(Model model) {
+        model.addAttribute("data", "a".repeat(100_000));
+        return "template_with_data_and_error";
+    }
+
 }
