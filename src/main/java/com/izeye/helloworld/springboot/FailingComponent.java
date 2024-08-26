@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class FailingComponent {
 
-    private final ComponentWithNonDaemonThread componentWithNonDaemonThread;
+    private final ComponentWithDaemonThread componentWithDaemonThread;
 
-    public FailingComponent(ComponentWithNonDaemonThread componentWithNonDaemonThread) {
-        this.componentWithNonDaemonThread = componentWithNonDaemonThread;
+    public FailingComponent(ComponentWithDaemonThread componentWithDaemonThread) {
+        this.componentWithDaemonThread = componentWithDaemonThread;
 
         throw new RuntimeException();
     }

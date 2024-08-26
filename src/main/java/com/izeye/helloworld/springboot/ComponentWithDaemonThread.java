@@ -1,6 +1,5 @@
 package com.izeye.helloworld.springboot;
 
-import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -8,17 +7,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Component with a non-daemon thread.
+ * Component with a daemon thread.
  *
  * @author Johnny Lim
  */
 @Component
 @Slf4j
-public class ComponentWithNonDaemonThread {
+public class ComponentWithDaemonThread {
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor(r -> {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        return thread;
+    });
 
-    public ComponentWithNonDaemonThread() {
+    public ComponentWithDaemonThread() {
         this.executorService.submit(() -> {
             try {
                 while (true) {
@@ -30,13 +33,6 @@ public class ComponentWithNonDaemonThread {
                 throw new RuntimeException(ex);
             }
         });
-    }
-
-    @PreDestroy
-    public void destroy() {
-        log.info("Destroying...");
-
-        this.executorService.shutdownNow();
     }
 
 }
