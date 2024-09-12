@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Johnny Lim
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RestTemplateTests {
 
     @Autowired
@@ -35,6 +36,9 @@ class RestTemplateTests {
 
     @Autowired
     Jackson2ObjectMapperBuilder objectMapperBuilder;
+
+    @LocalServerPort
+    int port;
 
     RestTemplate restTemplate;
 
@@ -67,7 +71,9 @@ class RestTemplateTests {
 
     @Test
     void exchange() {
-        List<Person> persons = this.restTemplate.exchange("http://localhost:8080/persons", HttpMethod.GET, null, new ParameterizedTypeReference<List<Person>>() {
+        String url = String.format("http://localhost:%s/persons", this.port);
+
+        List<Person> persons = this.restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Person>>() {
         }).getBody();
 
         assertThat(persons).singleElement().satisfies((person) -> assertThat(person.firstName()).isEqualTo("Johnny"));
@@ -77,7 +83,9 @@ class RestTemplateTests {
     void exchangeWithSnakeCase() {
         RestTemplate camelCaseRestTemplate = changeToCamelCase(this.restTemplateBuilder, this.objectMapperBuilder).build();
 
-        List<Person> persons = camelCaseRestTemplate.exchange("http://localhost:8080/persons/snake-case", HttpMethod.GET, null, new ParameterizedTypeReference<List<Person>>() {
+        String url = String.format("http://localhost:%s/persons/snake-case", this.port);
+
+        List<Person> persons = camelCaseRestTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Person>>() {
         }).getBody();
 
         assertThat(persons).singleElement().satisfies((person) -> assertThat(person.firstName()).isEqualTo("Johnny"));
