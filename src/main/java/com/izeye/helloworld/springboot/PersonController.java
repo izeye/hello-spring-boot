@@ -32,7 +32,7 @@ public class PersonController {
         return List.of(new Person("Johnny", "Lim"));
     }
 
-    @GetMapping(path = "/snake-case")
+    @GetMapping(path = "/snake-case", produces = "application/json")
     public String getPersonsAsSnakeCase() throws JsonProcessingException {
         return this.objectMapper.writeValueAsString(List.of(new Person("Johnny", "Lim")));
     }
