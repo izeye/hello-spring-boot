@@ -1,14 +1,21 @@
 package com.izeye.helloworld.springboot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.netty.handler.logging.LogLevel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
@@ -23,11 +30,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author Johnny Lim
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class WebClientTests {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
+
+    @Autowired
+    Jackson2ObjectMapperBuilder objectMapperBuilder;
+
+    @LocalServerPort
+    int port;
 
     private WebClient webClient;
 
@@ -76,6 +89,41 @@ class WebClientTests {
         assertThat(headers).doesNotContainEntry("Content-Encoding", List.of("zstd"));
         System.out.println(headers);
         System.out.println(responseEntity.getBody());
+    }
+
+    @Test
+    void exchange() {
+        String url = String.format("http://localhost:%s/persons", this.port);
+
+        List<Person> persons = this.webClient.get().uri(url).retrieve().bodyToMono(new ParameterizedTypeReference<List<Person>>() {
+        }).block();
+
+        assertThat(persons).singleElement().satisfies((person) -> assertThat(person.firstName()).isEqualTo("Johnny"));
+    }
+
+    @Test
+    void exchangeWithSnakeCase() {
+        WebClient webClient = configureToUseSnakeCase(this.webClientBuilder, this.objectMapperBuilder).build();
+
+        String url = String.format("http://localhost:%s/persons/snake-case", this.port);
+
+        List<Person> persons = webClient.get().uri(url).retrieve().bodyToMono(new ParameterizedTypeReference<List<Person>>() {
+        }).block();
+
+        assertThat(persons).singleElement().satisfies((person) -> assertThat(person.firstName()).isEqualTo("Johnny"));
+    }
+
+    private static WebClient.Builder configureToUseSnakeCase(WebClient.Builder webClientBuilder, Jackson2ObjectMapperBuilder objectMapperBuilder) {
+        ObjectMapper objectMapper = objectMapperBuilder
+                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                .build();
+
+        return webClientBuilder.codecs(configurer -> {
+            configurer.defaultCodecs()
+                    .jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper, MediaType.APPLICATION_JSON));
+            configurer.defaultCodecs()
+                    .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper, MediaType.APPLICATION_JSON));
+        });
     }
 
 }
