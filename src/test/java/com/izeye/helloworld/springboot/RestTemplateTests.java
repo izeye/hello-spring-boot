@@ -1,5 +1,7 @@
 package com.izeye.helloworld.springboot;
 
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +35,16 @@ class RestTemplateTests {
 
     @BeforeEach
     void setUp() {
-        this.restTemplate = restTemplateBuilder.build();
+        ZstdContentCompressionExec zstdContentCompressionExec = new ZstdContentCompressionExec();
+        HttpClient httpClient = HttpClientBuilder.create()
+                .addExecInterceptorFirst("zstd", zstdContentCompressionExec)
+                .build();
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        this.restTemplate = restTemplateBuilder.requestFactory(() -> requestFactory).build();
     }
 
     @Test
-    void test() {
+    void testGzip() {
         assertThat(this.restTemplate.getRequestFactory()).isInstanceOf(HttpComponentsClientHttpRequestFactory.class);
 
         String url = "https://www.google.com/";
@@ -54,6 +61,26 @@ class RestTemplateTests {
         HttpHeaders headers = responseEntity.getHeaders();
         // Apache HttpClient has already handled content-encoding under the hood, so there's no Content-Encoding header.
         assertThat(headers).doesNotContainEntry("Content-Encoding", List.of("gzip"));
+        System.out.println(headers);
+        System.out.println(responseEntity.getBody());
+    }
+
+    @Test
+    void testZstd() {
+        String url = "https://www.facebook.com/";
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.ACCEPT_ENCODING, "zstd");
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(url).build(true).toUri();
+
+        RequestEntity<Void> requestEntity = new RequestEntity<>(httpHeaders, HttpMethod.GET, uri);
+
+        ResponseEntity<String> responseEntity = this.restTemplate.exchange(requestEntity, String.class);
+
+        HttpHeaders headers = responseEntity.getHeaders();
+        // Apache HttpClient has already handled content-encoding under the hood, so there's no Content-Encoding header.
+        assertThat(headers).doesNotContainEntry("Content-Encoding", List.of("zstd"));
         System.out.println(headers);
         System.out.println(responseEntity.getBody());
     }
