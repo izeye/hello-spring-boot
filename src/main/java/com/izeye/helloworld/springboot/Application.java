@@ -1,12 +1,12 @@
 package com.izeye.helloworld.springboot;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ApplicationContext;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 /**
