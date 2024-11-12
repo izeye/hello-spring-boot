@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +17,7 @@ import java.util.Arrays;
  */
 @SpringBootApplication
 @ConfigurationPropertiesScan
+@EnableCaching
 @Slf4j
 public class Application {
 
