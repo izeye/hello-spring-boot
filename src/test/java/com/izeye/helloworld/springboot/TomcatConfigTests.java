@@ -27,16 +27,14 @@ class TomcatConfigTests {
     WebServerApplicationContext context;
 
     @Test
-    void maxHttpHeaderSizeShouldBeSet() {
-        long expectedMaxHttpHeaderSize = DataSize.ofKilobytes(80).toBytes();
+    void maxHttpRequestHeaderSizeShouldBeSet() {
+        long expectedMaxHttpRequestHeaderSize = DataSize.ofKilobytes(80).toBytes();
 
         TomcatWebServer server = (TomcatWebServer) this.context.getWebServer();
         Tomcat tomcat = server.getTomcat();
         AbstractHttp11Protocol protocolHandler = (AbstractHttp11Protocol) tomcat.getConnector().getProtocolHandler();
 
-        assertThat(protocolHandler.getMaxHttpHeaderSize()).isEqualTo(expectedMaxHttpHeaderSize);
-        assertThat(protocolHandler.getMaxHttpRequestHeaderSize()).isEqualTo(expectedMaxHttpHeaderSize);
-        assertThat(protocolHandler.getMaxHttpResponseHeaderSize()).isEqualTo(expectedMaxHttpHeaderSize);
+        assertThat(protocolHandler.getMaxHttpRequestHeaderSize()).isEqualTo(expectedMaxHttpRequestHeaderSize);
     }
 
 }
