@@ -1,9 +1,8 @@
 package com.izeye.helloworld.springboot;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Sample request.
