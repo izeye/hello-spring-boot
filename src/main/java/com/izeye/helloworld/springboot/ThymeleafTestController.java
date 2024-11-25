@@ -34,4 +34,14 @@ public class ThymeleafTestController {
         return "template_with_data_and_error";
     }
 
+    @GetMapping("/test-fragments")
+    public String testFragments() {
+        return "test_fragments";
+    }
+
+    @GetMapping("/test-fragments-unwrapped")
+    public String testFragmentsUnwrapped() {
+        return "test_fragments_unwrapped";
+    }
+
 }
