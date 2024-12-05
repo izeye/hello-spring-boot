@@ -16,9 +16,17 @@ public class MyApplicationRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(MyApplicationRunner.class);
 
+    private final TestService service;
+
+    public MyApplicationRunner(TestService service) {
+        this.service = service;
+    }
+
     @Override
     public void run(ApplicationArguments args) {
         log.info("Hello, Spring Boot!");
+
+        this.service.test();
     }
 
 }
