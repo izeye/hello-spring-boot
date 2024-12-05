@@ -12,7 +12,12 @@ public class DefaultTestService implements TestService {
 
     @Override
     public void test() {
-        System.out.println(Thread.currentThread());
+        System.out.println("In test(): " + Thread.currentThread());
+    }
+
+    @Override
+    public void testAnother() {
+        System.out.println("In testAnother(): " + Thread.currentThread());
     }
 
 }

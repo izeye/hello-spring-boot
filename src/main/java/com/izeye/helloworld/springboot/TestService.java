@@ -12,4 +12,7 @@ public interface TestService {
     @Async
     void test();
 
+    @Async("anotherThreadPoolTaskExecutor")
+    void testAnother();
+
 }

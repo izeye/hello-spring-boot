@@ -27,6 +27,7 @@ public class MyApplicationRunner implements ApplicationRunner {
         log.info("Hello, Spring Boot!");
 
         this.service.test();
+        this.service.testAnother();
     }
 
 }
