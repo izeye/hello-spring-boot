@@ -18,6 +18,19 @@ public class MyApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        try {
+            throw new RuntimeException("Boom!");
+        } catch (Exception e) {
+            // Works.
+            log.info("Exception occurred: {}", "test", e);
+
+            // Doesn't work.
+            log.info("Exception occurred: {}", e);
+
+            // Doesn't work.
+            log.info("Exception occurred: {} {}", "test", e);
+        }
+
         log.info("Hello, Spring Boot!");
     }
 
