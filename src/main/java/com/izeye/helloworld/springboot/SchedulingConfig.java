@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * {@link Configuration} for scheduling.
  *
@@ -20,6 +22,18 @@ public class SchedulingConfig {
     @Scheduled(initialDelay = 1_000, fixedDelay = 1_000)
     public void greet() {
         log.info("Hello, world!");
+    }
+
+    @Scheduled(initialDelay = 1_000, fixedDelay = 1_000)
+    public void sleep1() throws InterruptedException {
+        log.info("Sleeping!");
+        TimeUnit.SECONDS.sleep(1);
+    }
+
+    @Scheduled(initialDelay = 1_000, fixedDelay = 1_000)
+    public void sleep2() throws InterruptedException {
+        log.info("Sleeping!");
+        TimeUnit.SECONDS.sleep(1);
     }
 
 }
