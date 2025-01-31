@@ -20,6 +20,8 @@ dependencies {
 
 	implementation 'com.github.luben:zstd-jni:1.5.6-3'
 
+	implementation 'ch.qos.logback.access:logback-access-tomcat:2.0.6'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
