@@ -22,7 +22,7 @@ class PersonControllerTests {
 
     @Test
     void addPerson() {
-        Person person = new Person("Johnny", "Lim");
+        Person person = new Person(1L, "Johnny", "Lim");
         Person returnValue = this.client.post()
                 .uri("/persons")
                 .bodyValue(person)

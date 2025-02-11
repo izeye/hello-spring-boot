@@ -29,7 +29,7 @@ class WebClientTests {
 
     @Test
     void test() {
-        Person person = new Person("Johnny", "Lim");
+        Person person = new Person(1L, "Johnny", "Lim");
         Map<String, Object> response = this.webClient.post()
                 .uri("https://httpbin.org/post")
                 .bodyValue(person)
