@@ -1,6 +1,7 @@
 package com.izeye.helloworld.springboot;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,11 @@ public class TestController {
         myRequest.setId("id");
         myRequest.setHttpServletRequest(httpServletRequest);
         return myRequest;
+    }
+
+    @GetMapping("/hello")
+    public String hello(@RequestParam @NotEmpty String name) {
+        return "Hello, " + name + "!";
     }
 
 }
