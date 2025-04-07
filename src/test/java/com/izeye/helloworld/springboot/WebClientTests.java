@@ -5,23 +5,32 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.netty.handler.logging.LogLevel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ClientHttpRequestDecorator;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.web.reactive.function.client.ClientRequest;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,6 +71,62 @@ class WebClientTests {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                 .block();
         System.out.println(response);
+    }
+
+    @Test
+    void filter() {
+        WebClient webClient = this.webClientBuilder.filter((request, next) -> {
+            ClientRequest filtered = ClientRequest.from(request).header("foo", "bar").build();
+            return next.exchange(filtered);
+        }).build();
+
+        Person person = new Person("Johnny", "Lim");
+        Map<String, Object> response = webClient.post()
+                .uri("https://httpbin.org/post")
+                .bodyValue(person)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .block();
+        System.out.println(response);
+    }
+
+    @Test
+    void filterForLoggingRequestAndResponse() {
+        WebClient webClient = this.webClientBuilder.filter(loggingFilter()).build();
+
+        Person person = new Person("Johnny", "Lim");
+        Map<String, Object> response = webClient.post()
+                .uri("https://httpbin.org/post")
+                .bodyValue(person)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .block();
+        System.out.println("response: " + response);
+    }
+
+    private static ExchangeFilterFunction loggingFilter() {
+        return (request, next) -> next.exchange(requestWithLogging(request)).map(responseWithLogging());
+    }
+
+    private static ClientRequest requestWithLogging(ClientRequest request) {
+        return ClientRequest.from(request).body((outputMessage, context) -> request.body().insert(new ClientHttpRequestDecorator(outputMessage) {
+            @Override
+            public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
+                return super.writeWith(Mono.from(body).doOnNext((dataBuffer) -> {
+                    System.out.println("Request method: " + request.method());
+                    System.out.println("Request URI: " + request.url());
+                    System.out.println("Request headers: " + request.headers());
+                    System.out.println("Request body: " + dataBuffer.toString(StandardCharsets.UTF_8));
+                }));
+            }
+        }, context)).build();
+    }
+
+    private static Function<ClientResponse, ClientResponse> responseWithLogging() {
+        return (response) -> response.mutate().body(data -> data.doOnNext((dataBuffer) -> {
+            String body = dataBuffer.toString(StandardCharsets.UTF_8);
+            System.out.println("Response body: " + body);
+        })).build();
     }
 
     @Test
