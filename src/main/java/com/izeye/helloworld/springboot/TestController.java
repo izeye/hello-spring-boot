@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,6 +48,15 @@ public class TestController {
     @GetMapping("/hello")
     public String hello(@RequestParam @NotEmpty String name) {
         return "Hello, " + name + "!";
+    }
+
+    @GetMapping("/parameters")
+    public List<String> parameters(HttpServletRequest request) {
+        return request.getParameterMap()
+                .entrySet()
+                .stream()
+                .map((parameter) -> parameter.getKey() + "=" + Arrays.asList(parameter.getValue()))
+                .toList();
     }
 
 }
