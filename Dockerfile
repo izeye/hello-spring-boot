@@ -1,9 +1,13 @@
+FROM eclipse-temurin:21 AS builder
+WORKDIR /builder
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=tools -jar application.jar extract --layers --destination extracted
+
 FROM eclipse-temurin:21
-WORKDIR /hello-spring-boot
-COPY gradle /hello-spring-boot/gradle
-COPY src /hello-spring-boot/src
-COPY build.gradle /hello-spring-boot/
-COPY gradlew /hello-spring-boot/
-COPY settings.gradle /hello-spring-boot/
-RUN ./gradlew clean bootJar
-ENTRYPOINT ["java", "-jar", "build/libs/hello-spring-boot-0.0.1-SNAPSHOT.jar"]
+WORKDIR /application
+COPY --from=builder /builder/extracted/dependencies/ ./
+COPY --from=builder /builder/extracted/spring-boot-loader/ ./
+COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
+COPY --from=builder /builder/extracted/application/ ./
+ENTRYPOINT ["java", "-jar", "application.jar"]
