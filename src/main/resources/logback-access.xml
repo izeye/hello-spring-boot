@@ -11,5 +11,21 @@
         </encoder>
     </appender>
 
+    <appender name="HTTP_LOGSTASH_JSON_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/http/http.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/http/http.json.%d{yyyy-MM-dd}.%i</fileNamePattern>
+            <maxHistory>1</maxHistory>
+            <maxFileSize>300MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
+            <fieldNames>
+                <message>[ignore]</message>
+                <requestHeaders>request_headers</requestHeaders>
+            </fieldNames>
+        </encoder>
+    </appender>
+
     <appender-ref ref="HTTP_APPENDER" />
+    <appender-ref ref="HTTP_LOGSTASH_JSON_APPENDER" />
 </configuration>
