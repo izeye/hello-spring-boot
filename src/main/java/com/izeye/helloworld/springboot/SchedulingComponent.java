@@ -17,6 +17,8 @@ public class SchedulingComponent {
     @Scheduled(fixedRate = 5_000)
     public void scheduled() {
         log.info("scheduled() is invoked.");
+
+        throw new RuntimeException("Boom!");
     }
 
 }
