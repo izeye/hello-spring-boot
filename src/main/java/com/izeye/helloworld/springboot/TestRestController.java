@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping(path = "/test")
-public class TestController {
+public class TestRestController {
 
-    private static final Logger log = LoggerFactory.getLogger(TestController.class);
+    private static final Logger log = LoggerFactory.getLogger(TestRestController.class);
 
     @GetMapping("/httpServletRequest")
     public String http(HttpServletRequest request) {
