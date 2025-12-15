@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.netty.handler.logging.LogLevel;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,7 @@ class WebClientTests {
         this.webClient = webClientBuilder.clientConnector(new ReactorClientHttpConnector(httpClient)).build();
     }
 
+    @Disabled("503 Service Temporarily Unavailable from endpoint")
     @Test
     void test() {
         Person person = new Person("Johnny", "Lim");
@@ -73,6 +75,7 @@ class WebClientTests {
         System.out.println(response);
     }
 
+    @Disabled("503 Service Temporarily Unavailable from endpoint")
     @Test
     void filter() {
         WebClient webClient = this.webClientBuilder.filter((request, next) -> {
@@ -90,6 +93,7 @@ class WebClientTests {
         System.out.println(response);
     }
 
+    @Disabled("503 Service Temporarily Unavailable from endpoint")
     @Test
     void filterForLoggingRequestAndResponse() {
         WebClient webClient = this.webClientBuilder.filter(loggingFilter()).build();
