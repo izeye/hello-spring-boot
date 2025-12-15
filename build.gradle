@@ -35,5 +35,5 @@ tasks.named('test') {
 }
 
 tasks.named('wrapper') {
-	gradleVersion = "9.0.0"
+	gradleVersion = "9.2.1"
 }
