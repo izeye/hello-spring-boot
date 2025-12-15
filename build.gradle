@@ -7,7 +7,10 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'com.izeye.helloworld'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+
+java {
+    sourceCompatibility = 17
+}
 
 repositories {
 	mavenCentral()
@@ -33,5 +36,5 @@ tasks.named('test') {
 }
 
 tasks.named('wrapper') {
-	gradleVersion = "8.14.3"
+	gradleVersion = "9.2.1"
 }
