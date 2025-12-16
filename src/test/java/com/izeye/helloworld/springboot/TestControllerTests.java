@@ -33,6 +33,16 @@ class TestControllerTests {
     }
 
     @Test
+    void modelAndViewCustomView() {
+        this.webTestClient.get()
+                .uri("/test/model-and-view/custom-view")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                .expectBody().isEmpty();
+    }
+
+    @Test
     void responseBodyEmptyMap() {
         this.webTestClient.get()
                 .uri("/test/response-body/empty-map")

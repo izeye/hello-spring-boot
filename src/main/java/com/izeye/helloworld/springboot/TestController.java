@@ -1,5 +1,6 @@
 package com.izeye.helloworld.springboot;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,13 @@ public class TestController {
     @GetMapping("/model-and-view/missing-model")
     public ModelAndView modelAndViewMissingModel() {
         return new ModelAndView(new MappingJackson2JsonView());
+    }
+
+    @GetMapping("/model-and-view/custom-view")
+    public ModelAndView modelAndViewCustomView() {
+        return new ModelAndView((model, request, response) -> {
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        });
     }
 
     @GetMapping("/response-body/empty-map")
