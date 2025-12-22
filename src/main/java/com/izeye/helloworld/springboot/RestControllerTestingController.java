@@ -14,15 +14,15 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * {@link RestController} for testing.
+ * {@link RestController} for testing {@link RestController}.
  *
  * @author Johnny Lim
  */
 @RestController
 @RequestMapping(path = "/test-rest")
-public class TestRestController {
+public class RestControllerTestingController {
 
-    private static final Logger log = LoggerFactory.getLogger(TestRestController.class);
+    private static final Logger log = LoggerFactory.getLogger(RestControllerTestingController.class);
 
     @GetMapping("/httpServletRequest")
     public String http(HttpServletRequest request) {

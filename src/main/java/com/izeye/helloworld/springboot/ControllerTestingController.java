@@ -12,13 +12,13 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * {@link Controller} for testing.
+ * {@link Controller} for testing {@link Controller}.
  *
  * @author Johnny Lim
  */
 @Controller
 @RequestMapping(path = "/test")
-public class TestController {
+public class ControllerTestingController {
 
     @GetMapping("/model-and-view/missing-model")
     public ModelAndView modelAndViewMissingModel() {

@@ -8,13 +8,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
- * Tests for {@link TestController}.
+ * Tests for {@link ControllerTestingController}.
  *
  * @author Johnny Lim
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
-class TestControllerTests {
+class ControllerTestingControllerTests {
 
     @Autowired
     private WebTestClient webTestClient;
