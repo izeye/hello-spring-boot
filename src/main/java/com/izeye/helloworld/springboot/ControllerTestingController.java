@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Johnny Lim
  */
 @Controller
-@RequestMapping(path = "/test")
+@RequestMapping(path = "/test-controller")
 public class ControllerTestingController {
 
     @GetMapping("/model-and-view/missing-model")

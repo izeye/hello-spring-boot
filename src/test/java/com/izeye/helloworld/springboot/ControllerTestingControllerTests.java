@@ -23,7 +23,7 @@ class ControllerTestingControllerTests {
     @SuppressWarnings("deprecation")
     void modelAndViewMissingModel() {
         this.webTestClient.get()
-                .uri("/test/model-and-view/missing-model")
+                .uri("/test-controller/model-and-view/missing-model")
                 .exchange()
                 .expectStatus().isOk()
                 // Due to MappingJackson2JsonView (AbstractJackson2View) setting jakarta.servlet.ServletResponse.setCharacterEncoding()
@@ -35,7 +35,7 @@ class ControllerTestingControllerTests {
     @Test
     void modelAndViewCustomView() {
         this.webTestClient.get()
-                .uri("/test/model-and-view/custom-view")
+                .uri("/test-controller/model-and-view/custom-view")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
@@ -45,7 +45,7 @@ class ControllerTestingControllerTests {
     @Test
     void responseBodyEmptyMap() {
         this.webTestClient.get()
-                .uri("/test/response-body/empty-map")
+                .uri("/test-controller/response-body/empty-map")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)

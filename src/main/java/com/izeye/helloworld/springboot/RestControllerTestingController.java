@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author Johnny Lim
  */
 @RestController
-@RequestMapping(path = "/test-rest")
+@RequestMapping(path = "/test-rest-controller")
 public class RestControllerTestingController {
 
     private static final Logger log = LoggerFactory.getLogger(RestControllerTestingController.class);
