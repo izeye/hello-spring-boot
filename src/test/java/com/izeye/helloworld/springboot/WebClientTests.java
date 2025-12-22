@@ -27,6 +27,7 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -176,6 +177,23 @@ class WebClientTests {
         }).block();
 
         assertThat(persons).singleElement().satisfies((person) -> assertThat(person.firstName()).isEqualTo("Johnny"));
+    }
+
+    @Test
+    void uriTemplate() {
+        String id = "테스트";
+        String responseBody = this.webClient.get().uri("http://localhost:" + this.port + "/test/path-variable/{id}", id).retrieve().bodyToMono(String.class).block();
+        assertThat(responseBody).isEqualTo(id);
+    }
+
+    @Test
+    void uriTemplateWithEncodedUriVariable() {
+        String id = "테스트";
+        // uri() will encode URI variables including path ones, so you shouldn't encode them yourself.
+        // Otherwise, they'll be encoded twice.
+        String encodedId = URLEncoder.encode(id, StandardCharsets.UTF_8);
+        String responseBody = this.webClient.get().uri("http://localhost:" + this.port + "/test/path-variable/{id}", encodedId).retrieve().bodyToMono(String.class).block();
+        assertThat(responseBody).isNotEqualTo(id).isEqualTo(encodedId);
     }
 
     private static WebClient.Builder configureToUseSnakeCase(WebClient.Builder webClientBuilder, Jackson2ObjectMapperBuilder objectMapperBuilder) {
