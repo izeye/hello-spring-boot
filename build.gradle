@@ -27,6 +27,9 @@ dependencies {
 }
 
 tasks.named('test') {
+    // You can unset "SPRING_PROFILES_ACTIVE" environment variable not to interfere tests.
+//    environment.remove("SPRING_PROFILES_ACTIVE")
+
 	useJUnitPlatform()
 
     testLogging {
