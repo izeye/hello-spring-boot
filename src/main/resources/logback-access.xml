@@ -4,7 +4,8 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>logs/http/http.log.%d{yyyy-MM-dd}.%i</fileNamePattern>
             <maxHistory>1</maxHistory>
-            <maxFileSize>300MB</maxFileSize>
+            <maxFileSize>1KB</maxFileSize>
+            <totalSizeCap>5KB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%t{yyyy-MM-dd HH:mm:ss.SSS}%n%fullRequest%n%n%fullResponse</pattern>
