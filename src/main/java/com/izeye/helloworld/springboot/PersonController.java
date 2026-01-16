@@ -38,6 +38,7 @@ public class PersonController {
         return this.objectMapper.writeValueAsString(List.of(new Person("Johnny", "Lim")));
     }
 
+    // curl -XPOST -H "Content-Type: application/json" "http://localhost:8080/persons" --data '{"firstName":"Johnny","lastName":"Lim"}'
     @PostMapping
     public Person addPerson(@RequestBody Person person) {
         return person;
